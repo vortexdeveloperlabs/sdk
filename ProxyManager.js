@@ -6,13 +6,11 @@ export default class {
 	 * @constructor
 	 * @param {boolean} [cache=true] Cache the proxy; disabling this may slow down the proxy
 	 */
-	constructor(cache) {
+	constructor(cache = true) {
 		if (!this.swSupported)
 			!("serviceWorker" in navigator)
 				? console.error("Proxies are not supported on your browser")
 				: (this.swSupported = true);
-
-		this.cache ??= true;
 	}
 	/**
 	 * Spawn a new proxy
