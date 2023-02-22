@@ -1,27 +1,25 @@
-import ProxyFetch from "/aero/util/ProxyFetch.js";
-
-async function getEntries(resp) {
-	const data = await resp.text();
-
-	try {
-		return JSON.parse(data)[1];
-	} catch {
-		return [];
-	}
-}
+import ProxyFetch from "/aero/this/misc/ProxyFetch.js";
 
 export default class {
 	/**
 	 * A library that lets you get the url to redirect to and the search suggestions for various search engines
 	 * @constructor
 	 * @param {string} - The proxy backend's api route
-	 * @param {boolean} [ss=false] Enable safesearch
+	 * @param {boolean} - Enable safesearch
 	 */
-	constructor(api, ss) {
-		this.proxyFetch = new ProxyFetch(location.origin + api);
+	constructor(backends, ss = false) {
+		this.proxyFetch = new ProxyFetch(backends);
 		this.ss = ss;
 	}
+	async getEntries(resp) {
+		const data = await resp.text();
 
+		try {
+			return JSON.parse(data)[1];
+		} catch {
+			return [];
+		}
+	}
 	google = {
 		url: () => "https://www.google.com/search?q=",
 		ac: async query => {
@@ -35,9 +33,9 @@ export default class {
 
 			const xml = parser.parseFromString(body, "application/xml");
 
-			return [...xml.getElementsByTagName("suggestion")]
-				.map(element => element.getAttribute("data"))
-				.filter(data => Boolean);
+			return [...xml.getElementsByTagName("suggestion")].map(element =>
+				element.getAttribute("data")
+			);
 		},
 	};
 	brave = {
