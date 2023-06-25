@@ -1,8 +1,8 @@
 /**
- * @param {string} - A reference to the window
- * @param {string} - The url for the iframe
+ * @param - A reference to the window
+ * @param - The url for the iframe
  */
-function setUrl(win, url) {
+function setUrl(win: Window, url: string) {
 	win.document.body.innerHTML = `
 <!DOCTYPE html>
 <html lang="en">
@@ -28,10 +28,11 @@ function setUrl(win, url) {
 
 /**
  * A library that creates a popup protected from extension-based spyware, which also hides your browsing history
- * @param {string} - The url to hide
+ * @param - The url to hide
  */
-export default url => {
+export default (url: string) => {
 	const win = window.open("about:blank");
 
-	win.addEventListener("load", () => setUrl(win, url));
+	if (win instanceof Window)
+		win.addEventListener("load", () => setUrl(win, url));
 };

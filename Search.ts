@@ -1,17 +1,21 @@
-import ProxyFetch from "/aero/this/misc/ProxyFetch.js";
+import createBareClient from "@tomphttp/bare-client";
+import type BareClient from "@tomphttp/bare-client";
 
 export default class {
+	proxyFetch: BareClient;
+	ss: boolean;
+
 	/**
 	 * A library that lets you get the url to redirect to and the search suggestions for various search engines
 	 * @constructor
-	 * @param {string} - The proxy backend's api route
-	 * @param {boolean} - Enable safesearch
+	 * @param - The proxy backend's api route
+	 * @param - Enable safesearch
 	 */
-	constructor(backends, ss = false) {
-		this.proxyFetch = new ProxyFetch(backends);
+	constructor(backends: string[], ss = false) {
+		this.proxyFetch = new createBareClient(location.origin + backends[0]);
 		this.ss = ss;
 	}
-	async getEntries(resp) {
+	async getEntries(resp: Response): string[] {
 		const data = await resp.text();
 
 		try {
@@ -22,7 +26,7 @@ export default class {
 	}
 	google = {
 		url: () => "https://www.google.com/search?q=",
-		ac: async query => {
+		ac: async (query: string) => {
 			const resp = await this.proxyFetch.fetch(
 				`https://suggestqueries.google.com/complete/search?output=toolbar&hl=en&q=${query}`
 			);
@@ -40,32 +44,32 @@ export default class {
 	};
 	brave = {
 		url: () => "https://search.brave.com/search?q=",
-		ac: async query => {
+		ac: async (query: string) => {
 			const resp = await this.proxyFetch.fetch(
 				`https://search.brave.com/api/suggest?q=${query}&rich=false&source=web`
 			);
 
-			return await getEntries(resp);
+			return await this.getEntries(resp);
 		},
 	};
 	ddg = {
 		url: () => `https://duckduckgo.com/?q=${this.ss ? "&kp=1" : ""}`,
-		ac: async query => {
+		ac: async (query: string) => {
 			const resp = await this.proxyFetch.fetch(
 				`https://duckduckgo.com/ac/?q=${query}&type=list`
 			);
 
-			return await getEntries(resp);
+			return await this.getEntries(resp);
 		},
 	};
 	qwant = {
 		url: () => "https://www.qwant.com/?q=",
-		ac: async query => {
+		ac: async (query: string) => {
 			const resp = await this.proxyFetch.fetch(
 				`https://api.qwant.com/api/suggest/?client=opensearch&q=${query}`
 			);
 
-			return await getEntries(resp);
+			return await this.getEntries(resp);
 		},
 	};
 }
