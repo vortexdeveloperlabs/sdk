@@ -11,7 +11,7 @@ export default (url, $prefix = prefix) => {
 	img.onload = () => url;
 	img.onerror = () => location.origin + $prefix + url;
 
-	img.src = new URL(url).origin + "/favicon.ico";
+	img.src = `${new URL(url).origin}/favicon.ico`;
 
 	document.body.appendChild(img);
 };

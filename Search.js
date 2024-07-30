@@ -1,14 +1,11 @@
-import ProxyFetch from "/aero/this/misc/ProxyFetch.js";
-
 export default class {
 	/**
 	 * A library that lets you get the url to redirect to and the search suggestions for various search engines
 	 * @constructor
-	 * @param {string} - The proxy backend's api route
 	 * @param {boolean} - Enable safesearch
 	 */
-	constructor(backends, ss = false) {
-		this.proxyFetch = new ProxyFetch(backends);
+	constructor(ss = false) {
+		this.proxyFetch = new BareMux.BareClient();
 		this.ss = ss;
 	}
 	async getEntries(resp) {

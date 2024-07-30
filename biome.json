@@ -1,0 +1,9 @@
+{
+	"javascript": {
+		"formatter": {
+			"arrowParentheses": "asNeeded",
+			"trailingComma": "none",
+			"indentWidth": 4
+		}
+	}
+}

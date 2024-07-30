@@ -16,9 +16,9 @@ export default class {
 	 * Spawn a new proxy
 	 * @param {string} - The path to the service worker
 	 * @param {string} - The prefix where the proxy url's are handled
-	 * @param {boolean} [legacy=false] Do not register as a module script
+	 * @param {boolean} [legacy=true] Do not register as a module script
 	 */
-	add(path, prefix, legacy) {
+	add(path, prefix, legacy = true) {
 		if (!this.swSupported) return;
 
 		navigator.serviceWorker
@@ -26,7 +26,7 @@ export default class {
 				scope: prefix,
 				type: legacy ? "classic" : "module",
 				// Don't cache http requests
-				updateViaCache: this.cache ? "all" : "none",
+				updateViaCache: this.cache ? "all" : "none"
 			})
 			// Update the service worker
 			.then(reg => reg.update())
@@ -47,7 +47,7 @@ export default class {
 
 		navigator.serviceWorker.controller.postMessage({
 			id: id,
-			...config,
+			...config
 		});
 	}
 }
