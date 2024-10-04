@@ -5,7 +5,6 @@ export default class {
 	 * @param {boolean} - Enable safesearch
 	 */
 	constructor(ss = false) {
-		this.proxyFetch = new BareMux.BareClient();
 		this.ss = ss;
 	}
 	async getEntries(resp) {
@@ -20,7 +19,7 @@ export default class {
 	google = {
 		url: () => "https://www.google.com/search?q=",
 		ac: async query => {
-			const resp = await this.proxyFetch.fetch(
+			const resp = await new BareMux.BareClient().fetch(
 				`https://suggestqueries.google.com/complete/search?output=toolbar&hl=en&q=${query}`
 			);
 
@@ -33,36 +32,36 @@ export default class {
 			return [...xml.getElementsByTagName("suggestion")].map(element =>
 				element.getAttribute("data")
 			);
-		},
+		}
 	};
 	brave = {
 		url: () => "https://search.brave.com/search?q=",
 		ac: async query => {
-			const resp = await this.proxyFetch.fetch(
+			const resp = await new BareMux.BareClient().fetch(
 				`https://search.brave.com/api/suggest?q=${query}&rich=false&source=web`
 			);
 
 			return await getEntries(resp);
-		},
+		}
 	};
 	ddg = {
 		url: () => `https://duckduckgo.com/?q=${this.ss ? "&kp=1" : ""}`,
 		ac: async query => {
-			const resp = await this.proxyFetch.fetch(
+			const resp = await new BareMux.BareClient().fetch(
 				`https://duckduckgo.com/ac/?q=${query}&type=list`
 			);
 
 			return await getEntries(resp);
-		},
+		}
 	};
 	qwant = {
 		url: () => "https://www.qwant.com/?q=",
 		ac: async query => {
-			const resp = await this.proxyFetch.fetch(
+			const resp = await new BareMux.BareClient().fetch(
 				`https://api.qwant.com/api/suggest/?client=opensearch&q=${query}`
 			);
 
 			return await getEntries(resp);
-		},
+		}
 	};
 }

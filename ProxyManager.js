@@ -29,8 +29,7 @@ export default class {
 				updateViaCache: this.cache ? "all" : "none"
 			})
 			// Update the service worker
-			.then(reg => reg.update())
-			.catch(err => console.error(err.stack));
+			.then(reg => reg.update());
 	}
 	/**
 	 * Update the config
